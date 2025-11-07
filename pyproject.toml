@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "prochariot"
+version = "0.1.0" # Pre-release version for MVP
+authors = [{ name = "Simon Håkansson", email = "simon@delusional.enterprises" }]
+description = "An LLM-guided analysis tool for prokaryotic genomes."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+dependencies = [
+    "groq", # LLM interface
+    "click", # Command line interface
+]
+
+[project.scripts]
+# Command line entry point for the tool
+prochariot = "prochariot.cli:main"
