@@ -47,7 +47,7 @@ This design means `proChariot` can function as a synthesis step in a larger, aut
 
 In a recent project analyzing a VRE *E. faecium* "superbug," standard AMR screening tools **missed a critical, high-copy Multi-Drug Resistant (MDR) plasmid**. The threat was only identified through a time-consuming, manual, LLM-guided analysis of the full genome.
 
-`proChariot` is being built to **automate and scale that expert-level analysis**. Its role as a pipeline tool is to guide and prioritize the manual review. It turns a multi-hour search into a 30-second automated synthesis that generates both a machine-readable `genome_features.json` file and a human-readable `synthesis_summary.md`, allowing researchers to focus their efforts on verifying the key features `proChariot` has identified.
+`proChariot` is being built to **automate and scale that expert-level analysis**. Its role as a pipeline tool is to guide and prioritize the manual review. It turns a multi-hour search into a 30-second automated synthesis that generates both a machine-readable `genome_features.json` file and a human-readable `synthesis_summary.txt`, allowing researchers to focus their efforts on verifying the key features `proChariot` has identified.
 
 ## Roadmap to first release (*v.1.0.0*)
 
@@ -55,10 +55,10 @@ In a recent project analyzing a VRE *E. faecium* "superbug," standard AMR screen
   * `[ ]` **Core Engine:** Implement the main `analyze()` function to parse a `.tsv` and call the Groq API.
   * `[ ]` **Prompt Engineering:** Develop the initial system prompt to guide the LLM towards accurate, relevant synthesis.
   * `[ ]` **Structured JSON Output:** Enforce a reliable, hierarchical JSON output schema via API-level control.
-  * `[ ]` **Dual-File Output:** Implement logic to save both `genome_features.json` and `synthesis_summary.md`.
+  * `[ ]` **Dual-File Output:** Implement logic to save both `genome_features.json` and `synthesis_summary.txt`.
   * `[ ]` **Basic Testing:** Create simple `pytest` checks for the CLI.
   * `[ ]` **Documentation:** Write the initial user guide.
-  * `[ ]TBA` **Release:** Publish the first version to PyPI (`pip install prochariot`).
+  * `[ ]` **Release:** Publish the first version to PyPI (`pip install prochariot`).
 
 ### Future Enhancements
 
