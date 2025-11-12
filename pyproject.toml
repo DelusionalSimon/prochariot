@@ -19,6 +19,14 @@ classifiers = [
 dependencies = [
     "groq", # LLM interface
     "click", # Command line interface
+    "pandas", # Data manipulation
+]
+[project.optional-dependencies]
+dev = [
+    "pytest", # Testing framework
+    "build", # Packaging
+    "twine", # Publishing
+    "ruff", # Linting
 ]
 
 [project.scripts]
