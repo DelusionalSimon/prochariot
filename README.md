@@ -4,7 +4,7 @@
 
 It is designed to avoid the pitfalls of LLM hallucination by enforcing a structured JSON output schema and incorporating verification steps, as well as being designed to not sound overly confident in its output, to avoid misleading users. **Always double-check critical findings with traditional methods.**
 
-> **This project is in active, early-stage development (*v.1.0.0-beta*).**
+> **This project is in active, early-stage development (*v.0.1.0*).**
 >
 > The code is not stable and many features are incomplete. It is not ready for production use. This `README` outlines the vision and development roadmap.
 
@@ -52,10 +52,11 @@ In a recent project analyzing a VRE *E. faecium* "superbug," standard AMR screen
 ## Roadmap to first release (*v.1.0.0*)
 
   * `[x]` **Core CLI Structure:** Set up `pyproject.toml`, `cli.py` CLI, and `core.py` skeletons.
-  * `[ ]` **Core Engine:** Implement the main `analyze()` function to parse a `.tsv` and call the Groq API.
+  * `[ ]` **TSV Parser:** Implement a basic parser for Bakta `.tsv` files that converts them into JSON.
+  * `[ ]` **Core Engine:** Implement the main `analyze()` function to call the Groq API.
   * `[ ]` **Prompt Engineering:** Develop the initial system prompt to guide the LLM towards accurate, relevant synthesis.
   * `[ ]` **Structured JSON Output:** Enforce a reliable, hierarchical JSON output schema via API-level control.
-  * `[ ]` **Dual-File Output:** Implement logic to save both `genome_features.json` and `synthesis_summary.txt`.
+  * `[ ]` **Dual-File Output:** Implement logic to extract `synthesis_summary.txt` from the main JSON output.
   * `[ ]` **Basic Testing:** Create simple `pytest` checks for the CLI.
   * `[ ]` **Documentation:** Write the initial user guide.
   * `[ ]` **Release:** Publish the first version to PyPI (`pip install prochariot`).
@@ -68,7 +69,8 @@ In a recent project analyzing a VRE *E. faecium* "superbug," standard AMR screen
   * `[ ]` **Ensemble Analysis:** Add an option to perform "light agentic" consensus reporting.
   * `[ ]` **Error Detection:** Implement checks in the system prompt to identify common annotation errors.
   * `[ ]` **Hallucination Detection:** Add a verification step to cross-check the LLM's claims against the input data.
-  * `[ ]` **Prokka/GFF Support:** Add a parser for `.gff` files to make the tool compatible with Prokka.
+  * `[ ]` **Prokka Support:** Make the tool compatible with Prokka.
+  * `[ ]` **.gff Parser:** Implement a parser for `.gff` files for richer analysis.
   * `[ ]` **Distribution:** Package for Conda-Forge.
 
 ## Example Usage (*v.1.0.0*)
