@@ -38,6 +38,9 @@ def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
     # Skipping the first 5 metadata rows
     df = pd.read_csv(tsv_file, sep="\t", header=5) 
 
+    # Clean up # from the colunm names
+    df.columns = [col.lstrip("# ") for col in df.columns]
+
     return df
 
 # -------------[ CORE FUNCTION ]-------------
