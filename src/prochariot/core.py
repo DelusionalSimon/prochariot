@@ -8,6 +8,7 @@ Functions included:
 """
 # -------------[ LIBRARIES ]-------------
 from pathlib import Path
+import pandas as pd
 import groq
 
 # -------------[ HELPERS ]-------------
@@ -15,9 +16,9 @@ import groq
 # Section for future _helper() functions
 
 # -------------[ CORE COMPONENTS ]-------------
-def parse_bakta_tsv(tsv_file: Path) -> list[dict]
+def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
     """
-    Parses a Bakta .tsv file into a clean list of dictionaries.
+    Parses a Bakta .tsv file into a clean Pandas DataFrame.
 
     This function is publicly available. It parses the main columns
     and unnests the 'DbXrefs' column into a nested dictionary.
@@ -29,10 +30,15 @@ def parse_bakta_tsv(tsv_file: Path) -> list[dict]
 
     Returns
     -------
-    list[dict]
-        A list of dictionaries, where each dict is a processed feature.
+    pd.DataFrame
+        A Pandas DataFrame containing the parsed data.
     """
-    pass
+   
+    # Read the TSV file into a DataFrame
+    # Skipping the first 5 metadata rows
+    df = pd.read_csv(tsv_file, sep="\t", header=5) 
+
+    return df
 
 # -------------[ CORE FUNCTION ]-------------
 def analyze(input_directory: str, output_directory: str | None = ".", species: str | None = None, note: str | None = None) -> str:
@@ -66,3 +72,13 @@ def analyze(input_directory: str, output_directory: str | None = ".", species: s
     #TODO: Implement function logic
     pass
 
+
+# -------------[ TESTING HARNESS ]-------------
+if __name__ == "__main__":
+
+    # Testing constants
+    TSV_PATH = Path("../../test_data/st177_vre_bakta/assembly.tsv")
+
+    # Test the parse_bakta_tsv function
+    df = parse_bakta_tsv(TSV_PATH)
+    print(df.head())
