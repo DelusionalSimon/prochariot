@@ -12,8 +12,32 @@ import pandas as pd
 import groq
 
 # -------------[ HELPERS ]-------------
+def _dbxrefs_to_dict(dbxrefs: str) -> dict:
+    """
+    Converts a DbXrefs string from a Bakta .tsv file into a dictionary.
 
-# Section for future _helper() functions
+    Parameters
+    ----------
+    dbxrefs : str
+        The DbXrefs string from a Bakta .tsv file.
+
+    Returns
+    -------
+    dict
+        A dictionary representation of the DbXrefs.
+    """
+    dbxrefs_dict = {}
+
+    # Handle missing values
+    if pd.isna(dbxrefs):
+        return dbxrefs_dict
+
+    entries = dbxrefs.split(", ")
+    for entry in entries:
+        if ":" in entry:
+            key, value = entry.split(":", 1)
+            dbxrefs_dict[key] = value
+    return dbxrefs_dict
 
 # -------------[ CORE COMPONENTS ]-------------
 def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
@@ -40,6 +64,9 @@ def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
 
     # Clean up # from the colunm names
     df.columns = [col.lstrip("# ") for col in df.columns]
+
+    # Parse the 'DbXrefs' column into a nested dictionary
+    df['DbXrefs'] = df['DbXrefs'].apply(_dbxrefs_to_dict)
 
     return df
 
