@@ -7,11 +7,35 @@ Functions included:
     - analyze: Main function to perform LLM-guided analysis of prokaryotic genomes.
 """
 # -------------[ LIBRARIES ]-------------
+from pathlib import Path
 import groq
 
+# -------------[ HELPERS ]-------------
 
-# -------------[ FUNCTIONS ]-------------
-def analyze(input_directory: str, output_directory: str = ".", species: str | None = None, note: str | None = None) -> str:
+# Section for future _helper() functions
+
+# -------------[ CORE COMPONENTS ]-------------
+def parse_bakta_tsv(tsv_file: Path) -> list[dict]
+    """
+    Parses a Bakta .tsv file into a clean list of dictionaries.
+
+    This function is publicly available. It parses the main columns
+    and unnests the 'DbXrefs' column into a nested dictionary.
+
+    Parameters
+    ----------
+    tsv_file : Path
+        The path object pointing to the Bakta .tsv file.
+
+    Returns
+    -------
+    list[dict]
+        A list of dictionaries, where each dict is a processed feature.
+    """
+    pass
+
+# -------------[ CORE FUNCTION ]-------------
+def analyze(input_directory: str, output_directory: str | None = ".", species: str | None = None, note: str | None = None) -> str:
     """
     Performs an LLM-guided analysis of a Bakta output directory.
 
@@ -36,10 +60,9 @@ def analyze(input_directory: str, output_directory: str = ".", species: str | No
     Returns
     -------
     str
-        The path to the final analysis report.
+        The JSON-formatted analysis report.
 
     """
     #TODO: Implement function logic
-    #TODO: output json
     pass
 
