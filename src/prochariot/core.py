@@ -10,6 +10,7 @@ Functions included:
 from pathlib import Path
 import pandas as pd
 import groq
+import json
 
 # -------------[ HELPERS ]-------------
 def _dbxrefs_to_dict(dbxrefs: str) -> dict:
@@ -70,7 +71,27 @@ def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
 
     return df
 
-# -------------[ CORE FUNCTION ]-------------
+def df_to_json(df: pd.DataFrame) -> str:
+    """
+    Converts a Pandas DataFrame to a JSON-formatted string, handling NaN values.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The DataFrame to convert.
+
+    Returns
+    -------
+    str
+        The JSON-formatted string representation of the DataFrame.
+    """
+    # Replace all pandas 'NaN' with Python's 'None'
+    df = df.replace({pd.NA: None})
+    
+    # Convert the DataFrame to a JSON string
+    return df.to_json(orient="records")
+
+# -------------[ CORE ANALYZE FUNCTION ]-------------
 def analyze(input_directory: str, output_directory: str | None = ".", species: str | None = None, note: str | None = None) -> str:
     """
     Performs an LLM-guided analysis of a Bakta output directory.
@@ -109,6 +130,11 @@ if __name__ == "__main__":
     # Testing constants
     TSV_PATH = Path("../../test_data/st177_vre_bakta/assembly.tsv")
 
-    # Test the parse_bakta_tsv function
+    # Test pipeline
     df = parse_bakta_tsv(TSV_PATH)
-    print(df.head())
+    json_output = df_to_json(df)
+    
+    # Print the first couple of rows of JSON output nicely formatted
+    parsed_json = json.loads(json_output)
+    print(json.dumps(parsed_json[:4], indent=4))
+    
