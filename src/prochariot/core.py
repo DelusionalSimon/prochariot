@@ -40,6 +40,26 @@ def _dbxrefs_to_dict(dbxrefs: str) -> dict:
             dbxrefs_dict[key] = value
     return dbxrefs_dict
 
+def _df_to_json(df: pd.DataFrame) -> str:
+    """
+    Converts a Pandas DataFrame to a JSON-formatted string, handling NaN values.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        The DataFrame to convert.
+
+    Returns
+    -------
+    str
+        The JSON-formatted string representation of the DataFrame.
+    """
+    # Replace all pandas 'NaN' with Python's 'None'
+    df = df.replace({pd.NA: None})
+    
+    # Convert the DataFrame to a JSON string
+    return df.to_json(orient="records")
+
 # -------------[ CORE COMPONENTS ]-------------
 def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
     """
@@ -70,26 +90,6 @@ def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
     df['DbXrefs'] = df['DbXrefs'].apply(_dbxrefs_to_dict)
 
     return df
-
-def df_to_json(df: pd.DataFrame) -> str:
-    """
-    Converts a Pandas DataFrame to a JSON-formatted string, handling NaN values.
-
-    Parameters
-    ----------
-    df : pd.DataFrame
-        The DataFrame to convert.
-
-    Returns
-    -------
-    str
-        The JSON-formatted string representation of the DataFrame.
-    """
-    # Replace all pandas 'NaN' with Python's 'None'
-    df = df.replace({pd.NA: None})
-    
-    # Convert the DataFrame to a JSON string
-    return df.to_json(orient="records")
 
 # -------------[ CORE ANALYZE FUNCTION ]-------------
 def analyze(input_directory: str, output_directory: str | None = ".", species: str | None = None, note: str | None = None) -> str:
@@ -132,7 +132,7 @@ if __name__ == "__main__":
 
     # Test pipeline
     df = parse_bakta_tsv(TSV_PATH)
-    json_output = df_to_json(df)
+    json_output = _df_to_json(df)
     
     # Print the first couple of rows of JSON output nicely formatted
     parsed_json = json.loads(json_output)
