@@ -1,10 +1,18 @@
 """
 Core analysis logic for the proChariot package.
 
-This module contains the main functions of the proChariot library.
+This module contains the main functions of the proChariot library
+that perform the LLM-guided analysis of prokaryotic genomes
+based on Bakta annotation files.
 
 Functions included:
-    - analyze: Main function to perform LLM-guided analysis of prokaryotic genomes.
+    Core Analysis Function:
+        - analyze
+    Core Components:
+        - parse_bakta_tsv
+    Helper Functions:        
+        - _dbxrefs_to_dict
+        - _df_to_json
 """
 # -------------[ LIBRARIES ]-------------
 from pathlib import Path
