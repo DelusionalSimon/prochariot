@@ -17,8 +17,10 @@ Functions included:
 # -------------[ LIBRARIES ]-------------
 from pathlib import Path
 import pandas as pd
-import groq
+from groq import Groq
 import json
+import os
+import sys
 
 # -------------[ HELPERS ]-------------
 def _dbxrefs_to_dict(dbxrefs: str) -> dict:
@@ -67,6 +69,31 @@ def _df_to_json(df: pd.DataFrame) -> str:
     
     # Convert the DataFrame to a JSON string
     return df.to_json(orient="records")
+
+def _call_groq_llm(prompt: str) -> str:
+    """
+    Calls the Groq API with a given prompt and returns the response.
+
+    Parameters
+    ----------
+    prompt : str
+        The prompt to send to the Groq API.
+
+    Returns
+    -------
+    str
+        The response from the Groq API.
+    """
+    
+    # Retrieve the API key from environment variables
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        # This is the correct place for this error
+        raise ConnectionError(            
+            "Please set your groq API key: 'export GROQ_API_KEY=your_key_here'"
+        )   
+    print("API Key found, initializing Groq client...")
+
 
 # -------------[ CORE COMPONENTS ]-------------
 def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
@@ -142,7 +169,6 @@ if __name__ == "__main__":
     df = parse_bakta_tsv(TSV_PATH)
     json_output = _df_to_json(df)
     
-    # Print the first couple of rows of JSON output nicely formatted
-    parsed_json = json.loads(json_output)
-    print(json.dumps(parsed_json[:4], indent=4))
+    # Test API key handling
+    _call_groq_llm("Hello, Groq!")
     
