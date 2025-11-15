@@ -94,6 +94,15 @@ def _call_groq_llm(prompt: str) -> str:
         )   
     print("API Key found, initializing Groq client...")
 
+        # Initialize the Groq client
+    try:
+        client = Groq(api_key=api_key)
+    except Exception as e:
+        # This will catch specific Groq API errors, authentication failures, etc.
+        print(f"Error: Failed to initialize Groq client. Details: {e}")
+        sys.exit(1)
+    print("Groq client initialized.")
+
 
 # -------------[ CORE COMPONENTS ]-------------
 def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
