@@ -18,9 +18,11 @@ Functions included:
 from pathlib import Path
 import pandas as pd
 from groq import Groq
-import json
 import os
 import sys
+
+# -------------[ INTERNAL CONSTANTS ]-------------
+LLM_MODEL = "llama-3.3-70b-versatile"
 
 # -------------[ HELPERS ]-------------
 def _dbxrefs_to_dict(dbxrefs: str) -> dict:
@@ -103,6 +105,21 @@ def _call_groq_llm(prompt: str) -> str:
         sys.exit(1)
     print("Groq client initialized.")
 
+    # Send the prompt to the Groq API and get the response
+    try:
+        chat_completion = client.chat.completions.create(
+            messages = [
+                {"role": "user", "content": prompt}
+            ],
+            model = LLM_MODEL,
+        )
+    except Exception as e:
+        print(f"Error: Failed to get response from Groq API. Details: {e}")
+        sys.exit(1)
+
+    # Return the content of the response    
+    return chat_completion.choices[0].message.content
+
 
 # -------------[ CORE COMPONENTS ]-------------
 def parse_bakta_tsv(tsv_file: Path) -> pd.DataFrame:
@@ -178,6 +195,6 @@ if __name__ == "__main__":
     df = parse_bakta_tsv(TSV_PATH)
     json_output = _df_to_json(df)
     
-    # Test API key handling
-    _call_groq_llm("Hello, Groq!")
+    # test LLM call
+    print(_call_groq_llm(str(df)))
     
