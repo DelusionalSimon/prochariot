@@ -23,6 +23,7 @@ import sys
 
 # -------------[ INTERNAL CONSTANTS ]-------------
 LLM_MODEL = "llama-3.3-70b-versatile"
+ESSENTIAL_COLS = ['Sequence Id', 'Locus Tag', 'Gene', 'Product', 'DbXrefs']
 
 # -------------[ HELPERS ]-------------
 def _dbxrefs_to_dict(dbxrefs: str) -> dict:
@@ -54,7 +55,11 @@ def _dbxrefs_to_dict(dbxrefs: str) -> dict:
 
 def _df_to_json(df: pd.DataFrame) -> str:
     """
-    Converts a Pandas DataFrame to a JSON-formatted string, handling NaN values.
+    Converts a Pandas DataFrame to a JSON-formatted string.
+
+    This function ensures proper handling NaN values and
+    prunes the data to make the json output fit within the
+    token limits of the LLM. 
 
     Parameters
     ----------
@@ -66,11 +71,25 @@ def _df_to_json(df: pd.DataFrame) -> str:
     str
         The JSON-formatted string representation of the DataFrame.
     """
+
+    #TODO: The structure of the output JSON must be adjusted to fint within LLM token limits.
+    # Look into orienting the JSON differently (e.g., 'split', 'table', etc.) to optimize size.
+    # Consider summarizing or truncating more data.
+
+    #TODO: This function may be revived for hallucination checking or more advanced JSON creation down the line
+
     # Replace all pandas 'NaN' with Python's 'None'
     df = df.replace({pd.NA: None})
+
+    # Prune DataFrame to remove unnecessary columns
+    df_pruned = df[ESSENTIAL_COLS]
+
+    # Prune Dataframe to only keep named genes
+    df_final = df_pruned[~df['Gene'].isna()]
     
     # Convert the DataFrame to a JSON string
-    return df.to_json(orient="records")
+    return df_final.to_json(orient="records")
+
 
 def _call_groq_llm(prompt: str) -> str:
     """
@@ -195,6 +214,10 @@ if __name__ == "__main__":
     df = parse_bakta_tsv(TSV_PATH)
     json_output = _df_to_json(df)
     
+    # Check size of json output compared to df
+    print(f"JSON output size: {len(json_output)} characters")
+    print(f"DataFrame size: {len(str(df))} characters")
+
     # test LLM call
-    print(_call_groq_llm(str(df)))
+    print(_call_groq_llm(json_output))
     
